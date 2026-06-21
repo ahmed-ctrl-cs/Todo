@@ -64,35 +64,149 @@ class _mainHomePage extends State<mainHomePage> {
         : completedItems / totalItems;
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu), // This is the standard hamburger icon
+          tooltip: 'Open Menu',
+          onPressed: () {
+            // Add your logic to open a drawer or navigate
+            debugPrint('Menu tapped');
+          },
+        ),
         backgroundColor: Colors.transparent,
         foregroundColor: themeColor.surfaceTint,
-        toolbarHeight: 22,
+        toolbarHeight: 30,
         title: Text(
           'Mindful Planner',
-          style: TextStyle(color: themeColor.primary),
+          style: TextStyle(
+            color: Color.fromRGBO(148, 73, 49, 1),
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: CircleAvatar(
+              radius: 20, // Controls the size of the circle
+              backgroundImage: NetworkImage(
+                'https://your-image-url.com/profile.jpg',
+              ),
+            ),
+          ),
+        ],
       ),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "TODAY'S FOCUS",
+                    style: TextStyle(
+                      color: Color.fromRGBO(110, 125, 109, 1),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    'Good morning, Alex',
+                    style: GoogleFonts.literata(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: EdgeInsets.all(27),
               margin: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Color(0xfff5f3ee),
+                color: Color.fromRGBO(245, 243, 238, 0.6),
                 borderRadius: BorderRadius.all(Radius.circular(12)),
                 border: Border.all(
                   color: Color.fromRGBO(211, 211, 211, 0.5),
                   width: 0.5,
                 ),
               ),
-              child: Text('The AI summery will be here when implemented'),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.flare_rounded,
+                        size: 18,
+                        color: Color.fromRGBO(148, 73, 49, 1),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'DAILY INTENTION',
+                        style: TextStyle(
+                          color: Color.fromRGBO(84, 67, 62, 1),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                      SizedBox(width: 146),
+                      Icon(
+                        Icons.edit_outlined,
+                        color: Color.fromRGBO(148, 73, 49, 1),
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    '"I will move through today with clarity and prioritize my well-being while achieving my creative goals."',
+                    style: GoogleFonts.merriweather(
+                      // Or GoogleFonts.merriweather
+                      fontSize: 18,
+                      letterSpacing: 1.3,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight
+                          .w400, // This is the crucial missing piece (Semi-Bold)
+                      color: const Color(
+                        0xFF1E1B1A,
+                      ), // Use your dark onSurface text color
+                      height: 1.5, // Increases the space between lines
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(height: 15),
+                  Row(
+                    children: [
+                      Container(
+                        width: 6, // Controls the exact size of the circle
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(110, 125, 109, 1),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        'Refined by Mindful AI',
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(110, 125, 109, 1),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           //the percentage circle
           SliverToBoxAdapter(
             child: Container(
-              padding: EdgeInsets.all(30),
+              padding: EdgeInsets.all(20),
               margin: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Color(0xffffffff),
@@ -103,22 +217,23 @@ class _mainHomePage extends State<mainHomePage> {
                 ),
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CircularPercentIndicator(
-                    radius: 100,
-                    lineWidth: 10,
+                    radius: 65,
+                    lineWidth: 4,
                     percent: progressPercentage,
                     center: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           '${((progressPercentage * 100).toInt()).toString()}%',
-                          style: GoogleFonts.literata(fontSize: 30),
+                          style: GoogleFonts.literata(fontSize: 25),
                         ),
                         Text(
                           'Focus',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 13,
                             fontWeight: FontWeight.bold,
                             color: Color(0xff54433e),
                           ),
@@ -131,7 +246,7 @@ class _mainHomePage extends State<mainHomePage> {
                     animation: true,
                     animationDuration: 500,
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 20),
                   Text('$completedItems of $totalItems tasks completed'),
                 ],
               ),
@@ -139,6 +254,10 @@ class _mainHomePage extends State<mainHomePage> {
           ),
           //getting the data and presenting it
           ...Data.dummyData.map((groupData) {
+            final int remainingCount = (groupData['completed'] as List)
+                .where((status) => status == false)
+                .length;
+
             return SliverMainAxisGroup(
               slivers: [
                 //group names here
@@ -146,9 +265,28 @@ class _mainHomePage extends State<mainHomePage> {
                   child: Container(
                     padding: EdgeInsets.all(12),
                     margin: EdgeInsets.all(12),
-                    child: Text(
-                      groupData['cName'],
-                      style: GoogleFonts.literata(fontSize: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          ('${groupData['cName']} hi'),
+                          style: GoogleFonts.literata(fontSize: 20),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(right: 5, left: 5),
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(206, 224, 202, 0.5),
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                          child: remainingCount == 0
+                              ? null
+                              : Text(
+                                  remainingCount >= 2
+                                      ? '$remainingCount Remainders'
+                                      : '1 Remainder',
+                                ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -157,29 +295,44 @@ class _mainHomePage extends State<mainHomePage> {
                   itemCount: (groupData['items'] as List).length,
                   itemBuilder: ((context, index) {
                     final item = groupData['items'][index];
-                    final itemDisc = groupData['discription'][index];
+
+                    final List descriptions = groupData['discription'];
+                    final String itemDisc = descriptions.length > index
+                        ? descriptions[index]
+                        : "";
+
                     bool complete = groupData['completed'][index];
                     return Container(
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(1),
                       margin: EdgeInsets.only(
-                        right: 12,
-                        left: 12,
+                        right: 18,
+                        left: 18,
                         top: 0,
-                        bottom: 12,
+                        bottom: 18,
                       ),
-                      decoration: BoxDecoration(
-                        color: Color(0xfff5f3ee),
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        border: Border.all(
-                          color: Color.fromRGBO(211, 211, 211, 0.5),
-                          width: 0.5,
-                        ),
-                      ),
+                      decoration: groupData['completed'][index]
+                          ? BoxDecoration(
+                              color: Color.fromRGBO(245, 243, 238, 0.63),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                            )
+                          : BoxDecoration(
+                              color: Color(0xfff5f3ee),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                              border: Border.all(
+                                color: Color.fromRGBO(211, 211, 211, 0.5),
+                                width: 0.5,
+                              ),
+                            ),
                       child: CheckboxListTile(
                         title: groupData['completed'][index]
                             ? Text(
                                 item,
                                 style: TextStyle(
+                                  fontSize: 15,
                                   decoration: TextDecoration.lineThrough,
                                   decorationColor: Color.fromRGBO(
                                     120,
@@ -190,8 +343,64 @@ class _mainHomePage extends State<mainHomePage> {
                                   color: Color.fromRGBO(120, 120, 120, 0.5),
                                 ),
                               )
-                            : Text(item),
-                        subtitle: Text(itemDisc),
+                            : Text(item, style: TextStyle(fontSize: 15)),
+                        subtitle: itemDisc.isEmpty
+                            ? null // Removes the widget entirely if there is no description text
+                            : groupData['completed'][index]
+                            ? Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(
+                                      right: 4,
+                                      left: 4,
+                                    ),
+                                    decoration: const BoxDecoration(
+                                      color: Color.fromRGBO(215, 213, 208, 0.4),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      itemDisc,
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: Color.fromRGBO(
+                                          120,
+                                          120,
+                                          120,
+                                          0.6,
+                                        ),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text('2:00 PM'),
+                                ],
+                              )
+                            : Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(
+                                      right: 4,
+                                      left: 4,
+                                    ),
+                                    decoration: const BoxDecoration(
+                                      color: Color.fromRGBO(215, 213, 208, 0.9),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      itemDisc,
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                         value: complete,
                         onChanged: (bool? value) {
                           setState(() {
@@ -213,7 +422,10 @@ class _mainHomePage extends State<mainHomePage> {
           print("this button was clicked");
         },
         elevation: 10,
-        child: Icon(Icons.add),
+        shape: CircleBorder(),
+        backgroundColor: Color.fromRGBO(145, 71, 49, 1),
+        foregroundColor: Colors.white,
+        child: Icon(Icons.mic_none),
       ),
     );
   }

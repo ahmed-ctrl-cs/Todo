@@ -18,7 +18,7 @@ class Data {
     {
       "cName": "Personal",
       "items": ["Pick up organic ingredients for dinner", "Call parents"],
-      "discription": ["", ""],
+      "discription": [],
       "completed": [true, true],
     },
   ];
