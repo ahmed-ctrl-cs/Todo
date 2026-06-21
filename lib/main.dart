@@ -269,7 +269,7 @@ class _mainHomePage extends State<mainHomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          ('${groupData['cName']} hi'),
+                          groupData['cName'],
                           style: GoogleFonts.literata(fontSize: 20),
                         ),
                         Container(
