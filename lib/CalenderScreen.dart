@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mindfultodo/widgets/DayCard.dart';
 import 'package:mindfultodo/widgets/FocusBar.dart';
+import 'package:mindfultodo/assets/data.dart';
 
 class CalenderScreen extends StatefulWidget {
   const CalenderScreen({super.key});
@@ -21,6 +23,21 @@ class _CalenderScreen extends State<CalenderScreen> {
     for (int i = 0; i < weeklyFocusData.length; i++) {
       weeklyFocusDataSum += weeklyFocusData[i];
     }
+    int totalWeeklyTasks = 0;
+    int completedWeeklyTasks = 0;
+
+    for (var group in Data.dummyData) {
+      List<dynamic> completedStatusList = group['completed'];
+      totalWeeklyTasks += completedStatusList.length;
+      completedWeeklyTasks += completedStatusList
+          .where((status) => status == true)
+          .length;
+    }
+
+    int remainingWeeklyTasks = totalWeeklyTasks - completedWeeklyTasks;
+    double progressPercentage = totalWeeklyTasks == 0
+        ? 0.0
+        : completedWeeklyTasks / totalWeeklyTasks;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -112,6 +129,7 @@ class _CalenderScreen extends State<CalenderScreen> {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(242, 242, 240, 1),
                 borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Color.fromRGBO(243, 237, 234, 1)),
               ),
               padding: EdgeInsets.all(13),
               margin: EdgeInsets.all(13),
@@ -152,6 +170,82 @@ class _CalenderScreen extends State<CalenderScreen> {
                         }),
                       ],
                     ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(249, 248, 243, 1),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Color.fromRGBO(243, 237, 234, 1)),
+              ),
+              padding: EdgeInsets.all(13),
+              margin: EdgeInsets.all(13),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'TASK COMPLETION',
+                        style: TextStyle(
+                          color: Color.fromRGBO(105, 128, 109, 1),
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                  CircularPercentIndicator(
+                    radius: 65,
+                    lineWidth: 8,
+                    percent: progressPercentage,
+                    center: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${((progressPercentage * 100).toInt()).toString()}%',
+                          style: GoogleFonts.literata(fontSize: 25),
+                        ),
+                        Text(
+                          'Focus',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff54433e),
+                          ),
+                        ),
+                      ],
+                    ),
+                    progressColor: Color(0xff944931),
+                    backgroundColor: Color.fromRGBO(211, 211, 211, 0.5),
+                    circularStrokeCap: CircularStrokeCap.round,
+                    animation: true,
+                    animationDuration: 500,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text('Completed'),
+                      Spacer(),
+                      Text(
+                        '$completedWeeklyTasks',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Remaining'),
+                      Spacer(),
+                      Text(
+                        '$remainingWeeklyTasks',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ],
               ),

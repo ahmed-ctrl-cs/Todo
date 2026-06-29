@@ -20,7 +20,8 @@ class DayCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.all(15),
+        width: 70,
+        margin: EdgeInsets.only(top: 15, bottom: 15, right: 8, left: 8),
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
           border: Border.all(
