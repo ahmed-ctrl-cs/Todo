@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mindfultodo/AddTaskScreen.dart';
+import 'package:mindfultodo/CalenderScreen.dart';
 import 'package:mindfultodo/assets/colors.dart';
 import 'assets/data.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -96,7 +97,7 @@ class _mainHomePage extends State<mainHomePage> {
             child: CircleAvatar(
               radius: 20, // Controls the size of the circle
               backgroundImage: NetworkImage(
-                'https://www.gettyimages.com/detail/photo/cold-day-at-the-beach-royalty-free-image/1161727825',
+                'https://imgs.search.brave.com/BZx7X6J0HrCfjRBGoDkUIODgrIDWMlesjQwYm4Zvvhs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vcGljanVt/Ym8uY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy9hcnRpc3RpYy1o/aWdoLWZhc2hpb24t/cG9ydHJhaXQtb2Yt/YS13b21hbi13aXRo/LXN1bmdsYXNzZXMt/ZnJlZS1pbWFnZS5q/cGVnP3c9NjAwJnF1/YWxpdHk9ODA',
               ),
             ),
           ),
@@ -428,7 +429,7 @@ class _mainHomePage extends State<mainHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: ((context) => Addtaskscreen())),
+            MaterialPageRoute(builder: ((context) => CalenderScreen())),
           );
         },
         elevation: 10,

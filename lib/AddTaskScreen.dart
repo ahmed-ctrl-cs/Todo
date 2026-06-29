@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mindfultodo/assets/data.dart';
 
 class Addtaskscreen extends StatefulWidget {
   const Addtaskscreen({super.key});
@@ -10,6 +12,7 @@ class Addtaskscreen extends StatefulWidget {
 class _Addtaskscreen extends State<Addtaskscreen> {
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -33,7 +36,7 @@ class _Addtaskscreen extends State<Addtaskscreen> {
             child: CircleAvatar(
               radius: 20,
               backgroundImage: NetworkImage(
-                'https://www.gettyimages.com/detail/photo/cold-day-at-the-beach-royalty-free-image/1161727825',
+                'https://imgs.search.brave.com/BZx7X6J0HrCfjRBGoDkUIODgrIDWMlesjQwYm4Zvvhs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vcGljanVt/Ym8uY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy9hcnRpc3RpYy1o/aWdoLWZhc2hpb24t/cG9ydHJhaXQtb2Yt/YS13b21hbi13aXRo/LXN1bmdsYXNzZXMt/ZnJlZS1pbWFnZS5q/cGVnP3c9NjAwJnF1/YWxpdHk9ODA',
               ),
             ),
           ),
@@ -82,6 +85,64 @@ class _Addtaskscreen extends State<Addtaskscreen> {
               ],
             ),
           ),
+          SliverToBoxAdapter(child: SizedBox(height: 15)),
+          ...Data.dummyData.map((groupData) {
+            SliverToBoxAdapter(
+              child: Row(
+                children: [
+                  Text('ADDED TASKS'),
+                  Text('${(groupData['items'] as List).length} items'),
+                ],
+              ),
+            );
+            return SliverList.builder(
+              itemCount: (groupData['items'] as List).length,
+              itemBuilder: ((context, index) {
+                return Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      width: screenSize.width - 20,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: Color.fromRGBO(235, 220, 210, 1),
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                groupData['items'][index],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+
+                              Text(
+                                groupData['cName'],
+                                style: TextStyle(
+                                  color: Color.fromRGBO(94, 78, 72, 1),
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.edit_outlined),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                  ],
+                );
+              }),
+            );
+          }),
         ],
       ),
     );
